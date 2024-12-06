@@ -12,7 +12,7 @@ Summary list of conformity assessment bodies that have implemented or plan to im
 
 
 |Organisation Name |Accreditation|Geographic footprint|UNTP Scope|Status|
-|--|--|--|--|
+|--|--|--|--|--|
 |[ACRS (Australasian Certification Authority for Reinforcing and Structural Steel)](#acrs)|Global MRA|AU, NZ|DPP, DCC|planned| 
 |[The Copper Mark](#the-copper-mark)|Industry|GLobal|DCC|planned| 
 
@@ -31,13 +31,13 @@ Summary list of conformity assessment bodies that have implemented or plan to im
 
 |Logo|Implementation Statement|
 |--|--|
-|![Logo](../../implementations/steelcertification.com/logo.png) | ACRS is the leading CAB for reinforcing and structural steel in Australia. We have committed to implement UNTP to support the local steel industry and to help facilitate the transition to a more transparent supply chain that adds value to the building and manufacturing industries. |
+|![Logo](/img/implementations/steelcertification.com/logo.png) | ACRS is the leading CAB for reinforcing and structural steel in Australia. We have committed to implement UNTP to support the local steel industry and to help facilitate the transition to a more transparent supply chain that adds value to the building and manufacturing industries. |
 
-** Scheme Information **
+**Scheme Information**
 
 |Conformity Scheme|Description|Topic|UNTP Scope|Test Report|
 |--|--|--|--|--|
-|[Steel Products](https://ghgprotocol.org/)|The Product Certification Scheme certifies steel construction products are manufactured to Australian and New Zealand Standards and other nominated technical standards. It provides users with certainty that steel manufacturers and producers of fabricated materials adhere to necessary specifictions across the construction sector|Safety|DPP, DCC v0.5, v1.0|TBA |
+|[Steel Products](https://steelcertification.com/sustainability-certification)|The Product Certification Scheme certifies steel construction products are manufactured to Australian and New Zealand Standards and other nominated technical standards. It provides users with certainty that steel manufacturers and producers of fabricated materials adhere to necessary specifictions across the construction sector|Safety|DPP, DCC v0.5, v1.0|TBA |
 
 ### [The Copper Mark](https://coppermark.org/)
 
@@ -50,9 +50,9 @@ Summary list of conformity assessment bodies that have implemented or plan to im
 
 |Logo|Implementation Statement|
 |--|--|
-|![Logo](../../implementations/coppermark.org/logo.png) | The Copper Mark is the leading assurance framework promoting responsible practices in the copper, molybdenum, nickel, and zinc value chains. It intends to implement the UNTP to support the piloting of a full value chain approach, promoting transparency and ensuring the highest levels of integrity in their standards. |
+|![Logo](/img/implementations/coppermark.org/logo.png) | The Copper Mark is the leading assurance framework promoting responsible practices in the copper, molybdenum, nickel, and zinc value chains. It intends to implement the UNTP to support the piloting of a full value chain approach, promoting transparency and ensuring the highest levels of integrity in their standards. |
 
-** Scheme Information **
+**Scheme Information**
 
 |Conformity Scheme|Description|Topic|UNTP Scope|Test Report|
 |--|--|--|--|--|
