@@ -37,7 +37,7 @@ The decryption of previously issued and encrypted verifiable credentials is pref
 * **data requestor** is the party seeking access to product data held and maintained by the data holder. 
 
 |ID|Name|Requirement|Examples|Solution Mapping|
-|--|--|--|--|
+|--|--|--|--|--|
 |DAC-1|Anonymous access|As a data requestor that requires access to public product information, I should be able to access the information without any registration or identification - so that my privacy remains protected. |Human user or business system requests public data about an identified facility / product / serialised item. The data is returned.|[Anonymous public access](#anonymous-public-access)|
 |DAC-2|Access by legitimate owner|As the legitimate owner or user of a specific serialised item, I should be able to access non-public information about my item and also be able to update post-sale life-cycle events such as usage and maintenance history without any need to register or identify myself to the data holder. |[Anonymous access with secret](#anonymous-access-with-secret)|
 |DAC-3|Access with verifiable role|As an authorised actor such as an accredited recycling plant or a government authority, I should be able to access and update non-public product information in according to my authorised role even if I am otherwise unknown to the data holder.|An accredited recycling plant requests access to detailed recycling instructions for an end of life EV battery |[DID-Auth Access with DIA credential](#authenticated-access-with-dia-credential) `registrationScopeList` property|
@@ -148,9 +148,9 @@ These two URLs would produce the following QR codes
 
 ### Decentralised authentication protocols
 
-DID Auth specification link : https://w3c-ccg.github.io/vp-request-spec/#did-authentication 
-DID SIOP specification link : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html 
-OID4VP specification link : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html 
+* DID Auth specification link : https://w3c-ccg.github.io/vp-request-spec/#did-authentication 
+* DID SIOP specification link : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html 
+* OID4VP specification link : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html 
 
 | **Aspect**                | ** DID Authentication ** | **DID-SIOP**     | **OpenID4VP**     |
 |---------------------------|-------------------|-------------|-------------------|
