@@ -15,7 +15,7 @@ The ability to enforce access control to non-public data is a critical capabilit
 
 ## Conceptual Model
 
-The conceptual model for decentralised access control is relatively simple. All non-public credentials are encrypted with a unique key for each credential. Access to encrypted data then boils down to the mechanism by which authorised parties acquire decryption keys from a data holder that may not know the requestor. There are only two ways to get keys.
+The conceptual model for decentralised access control is relatively simple. All non-public credentials are encrypted with a unique key for each credential. Access to encrypted data then boils down to the mechanism by which authorised parties acquire decryption keys from a data holder that may not know the requestor. There are only two ways to prove rights to encrypted data.
 
 1. **You already have the key:** The key is passed by the data holder to the data requestor by a separate channel. For example, to empower access to non-public data by the legitimate purchaser of the goods, the key could be located inside the packaging of the product. 
 2. **You have a right to the key:** The key is made available to any data requestor that can prove their authorised role to the data holder via a [DID Authentication](https://w3c-ccg.github.io/vp-request-spec/#did-authentication). 
@@ -24,7 +24,7 @@ Each uniquely identified item will have a unique encryption key. Therefore the k
 
 Shared secrets and DID Authentication can be used in conjunction - for example a data holder may allow anonymous users to read non-public data with just a secret but may require both the secret (to prove item ownership) and DID Authentication (to confirm identity or role of the data requestor) to update item data.
 
-![DAC Concept Model](DigitalIdentityAnchor.png)
+![DAC Concept Model](DecentralisedAccessControl.png)
 
 The decryption of previously issued and encrypted verifiable credentials is preferred over any dynamic service because 
 
@@ -39,18 +39,16 @@ The decryption of previously issued and encrypted verifiable credentials is pref
 |ID|Name|Requirement|Examples|Solution Mapping|
 |--|--|--|--|--|
 |DAC-1|Anonymous access|As a data requestor that requires access to public product information, I should be able to access the information without any registration or identification - so that my privacy remains protected. |Human user or business system requests public data about an identified facility / product / serialised item. The data is returned.|[Anonymous public access](#anonymous-public-access)|
-|DAC-2|Access by legitimate owner|As the legitimate owner or user of a specific serialised item, I should be able to access non-public information about my item and also be able to update post-sale life-cycle events such as usage and maintenance history without any need to register or identify myself to the data holder. |[Anonymous access with secret](#anonymous-access-with-secret)|
+|DAC-2|Access by legitimate owner|As the legitimate owner or user of a specific serialised item, I should be able to access non-public information about my item and also be able to update post-sale life-cycle events without any need to register or identify myself to the data holder.|An EV battery owner requires access to the usage and maintenance history of their battery. |[Anonymous access with secret](#anonymous-access-with-secret)|
 |DAC-3|Access with verifiable role|As an authorised actor such as an accredited recycling plant or a government authority, I should be able to access and update non-public product information in according to my authorised role even if I am otherwise unknown to the data holder.|An accredited recycling plant requests access to detailed recycling instructions for an end of life EV battery |[DID-Auth Access with DIA credential](#authenticated-access-with-dia-credential) `registrationScopeList` property|
 |DAC-4|Access with verifiable identity|As a known and trusted data requestor party I should be able to prove my identity to the data holder and be granted access according to my permissions.|A trusted auditor requests access to details conformity evidence so that they can attest to the accuracy of a conformity assessment. |[DID-Auth Access with DIA credential](#authenticated-access-with-dia-credential) `registeredId` property|
 |DAC-5|Confidential supply|As buyer that received credentials from my suppliers that provide confidence in the sustainability or quality of my upstream supply chain, I would like to pass on the sustainability or quality confidence to my customers without revealing the identity of my suppliers. |A cotton fabric manufacturer wants to provide verifiable evidence of organic cotton supply without identifying the raw cotton supplier|[N-tier supplier visibility](#n-tier-supplier-visibility) |
 |DAC-6|Discoverability|As any data requestor that queries available data about a product or facility from an identity resolver service, I would like to understand not only what public data is available but also what confidential data is available and what evidence I need to provide to access the confidential data.|A repair facility wants to know whether a maintenance history is available for a given product ID, the resolver service responds with a set of maintenance link types but requires either the secret key or proof of authority to provide decryption keys.|[Discoverability of encrypted content](#discoverability-of-encrypted-content) |
 |DAC-7|Durability| As a data requestor seeking information about a product or facility, I want to access the necessary data according to my role even if the original manufacturer is no longer in business and whether or not the data is open or confidential.| A recycling plant needs non-public data about electrical components made by a parts manufacturer that is no longer in business|[Durable storage options](#durable-storage-options)|
-|DAC-8|Limit impact|The confidential data access scope associated with a specific secret key should be limited to one product or item so that the consequence of un-authorised access to confidential data minimised| |[Encryption granularity](#encryption-granularity) |
+|DAC-8|Limit impact|The confidential data access scope associated with a specific secret key should be limited to one product or item so that the consequence of un-authorised access to confidential data minimised|A decryption key is leaked to the public but the access is grants is limited to a single serialised item. |[Encryption granularity](#encryption-granularity) |
 |DAC-9|Small footprint|Where space is tight then a small format secret key option is available.|A small but secure QR under a wine bottle cap provides access to data about that specific bottle.|[Secret key carrier](#secret-key-carrier)
 
 ## Decentralised Access Control
-
-
 
 ### Anonymous public access
 
@@ -136,23 +134,17 @@ These two URLs would produce the following QR codes
  - Related business data is the secret
 
 
-## Authenticated access
-
-
-### With conventional login
-
-
-### With DID-Auth DIA credential
+### Federated authentication
 
 
 
-### Decentralised authentication protocols
+### Decentralised authentication
 
 * DID Auth specification link : https://w3c-ccg.github.io/vp-request-spec/#did-authentication 
 * DID SIOP specification link : https://openid.net/specs/openid-connect-self-issued-v2-1_0.html 
 * OID4VP specification link : https://openid.net/specs/openid-4-verifiable-presentations-1_0.html 
 
-| **Aspect**                | ** DID Authentication ** | **DID-SIOP**     | **OpenID4VP**     |
+| **Aspect**                | **DID Authentication** | **DID-SIOP**     | **OpenID4VP**     |
 |---------------------------|-------------------|-------------|-------------------|
 | **Primary Purpose**       | DID-based authentication with credential integration   | Decentralized login using OIDC        | Credential presentation in OIDC      |
 | **Workflow Complexity**   | Moderate                                                             | Moderate                              | Complex                              |
