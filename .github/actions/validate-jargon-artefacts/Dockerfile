@@ -6,4 +6,4 @@ RUN npm ci
 
 COPY validation.js /validation.js
 
-CMD ["node", "/validation.js"]
+CMD ["node", "--experimental-modules", "/validation.js"]
