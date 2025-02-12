@@ -27,7 +27,7 @@ jobs:
       - name: Validate Jargon Artefacts
         uses: ./.github/actions/validate-jargon-artefacts
         with:
-          jargon-webhook-payload: '${{ toJson(github.event.client_payload) }}'
+          jargon-webhook-payload: ${{ fromJSON(github.event.client_payload) }}
 
   # get-jargonArtefacts:
   #   runs-on: ubuntu-latest
