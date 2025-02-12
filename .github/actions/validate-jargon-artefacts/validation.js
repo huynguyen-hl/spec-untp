@@ -1,5 +1,7 @@
 const core = require('@actions/core');
 
+const jargonArtefactPayload = process.env.INPUT_JARGON_WEBHOOK_PAYLOAD;
+
 async function validateJargonArtefacts(jargonArtefact) {
   try {
     if (jargonArtefact.action && jargonArtefact.action.test) {
@@ -14,7 +16,6 @@ async function validateJargonArtefacts(jargonArtefact) {
 
 async function run() {
   try {
-      const jargonArtefactPayload = core.getInput('jargon-webhook-payload');
       core.info(`Raw Payload: ${jargonArtefactPayload}`); // Debugging log
       core.info(`typeof jargonArtefactPayload: ${typeof jargonArtefactPayload}`);
 
