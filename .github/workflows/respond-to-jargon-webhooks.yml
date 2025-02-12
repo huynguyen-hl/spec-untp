@@ -2,7 +2,7 @@ name: respond-to-jargon-webhooks
 
 on:
   repository_dispatch:
-    types: [jargon_onSnapshot]
+    types: [jargon_on_snapshot]
 
 env:
   ARTEFACT_DIR: jargon/
