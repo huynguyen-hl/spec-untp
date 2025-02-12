@@ -15,7 +15,7 @@ async function validateJargonArtefacts(jargonArtefact) {
 async function run() {
   try {
       const jargonArtefactPayload = core.getInput('jargon-webhook-payload');
-      core.info('jargonArtefactPayload: ' + jargonArtefactPayload);
+      core.info(`Raw Payload: ${jargonArtefactPayload}`); // Debugging log
       core.info(`typeof jargonArtefactPayload: ${typeof jargonArtefactPayload}`);
 
       const jargonArtefact = JSON.parse(jargonArtefactPayload);
