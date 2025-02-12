@@ -66,8 +66,7 @@ async function validateSampleCredentials(jsonSchemas) {
   const finalResult = results.every(({ valid }) => valid);
   core.info(`Final sample credentials validation result: ${finalResult ? 'succeeded' : 'failed'}.`);
   if (!finalResult) {
-    const errorDetails = results.map(({ errors }) => errors).join('\n');
-    return core.setFailed(`Sample credentials validation failed: ${JSON.stringify(errorDetails)}`);
+    return core.setFailed(`Sample credentials validation failed: ${JSON.stringify(results)}`);
   }
 }
 
