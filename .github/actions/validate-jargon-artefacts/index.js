@@ -67,7 +67,7 @@ async function validateSampleCredentials(jsonSchemas) {
   core.info(`Final sample credentials validation result: ${finalResult ? 'succeeded' : 'failed'}.`);
   if (!finalResult) {
     const errorDetails = results.map(({ errors }) => errors).join('\n');
-    return core.setFailed(`Sample credentials validation failed: ${errorDetails}`);
+    return core.setFailed(`Sample credentials validation failed: ${JSON.stringify(errorDetails)}`);
   }
 }
 
@@ -90,11 +90,11 @@ function splitSchemasAndInstances(jsonSchemas) {
   const schemas = {};
   const instances = {};
 
-  for (const file of jsonSchemas) {
-    if (file.fileName.includes(jsonSchemaSuffix) && !file.fileName.includes('_instance')) {
-      schemas[file.fileName] = file.url;
-    } else if (file.fileName.includes(jsonInstanceSuffix)) {
-      instances[file.fileName] = file.url;
+  for (const schema of jsonSchemas) {
+    if (schema.fileName.includes(jsonSchemaSuffix) && !schema.fileName.includes('_instance')) {
+      schemas[schema.fileName] = schema.url;
+    } else if (schema.fileName.includes(jsonInstanceSuffix)) {
+      instances[schema.fileName] = schema.url;
     }
   }
 
