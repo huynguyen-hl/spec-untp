@@ -1,6 +1,6 @@
-import core from '@actions/core';
-import addFormats from 'ajv-formats';
-import Ajv2020 from 'ajv/dist/2020';
+const core = require('@actions/core');
+const addFormats = require('ajv-formats');
+const Ajv2020 = require('ajv/dist/2020');
 
 const ajv = new Ajv2020({
   allErrors: true,
