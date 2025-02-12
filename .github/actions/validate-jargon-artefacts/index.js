@@ -23,7 +23,7 @@ async function validateJargonArtefacts(jargonArtefact) {
 
     core.info('Validating Jargon artefacts...');
 
-    const { jsonSchemas } = jargonArtefact.artefacts;
+    const { jsonSchemas = [] } = jargonArtefact.artefacts;
     core.info(`Json Schemas: ${JSON.stringify(jsonSchemas)}`);
     if (jsonSchemas && jsonSchemas.length) {
       core.info('Validating sample credentials...');
@@ -42,8 +42,9 @@ async function validateJargonArtefacts(jargonArtefact) {
 // validate context
 function validateJsonLdContext(jsonldContext) {}
 // validate sample credentials
-async function validateSampleCredentials(jsonSchemas = []) {
+async function validateSampleCredentials(jsonSchemas) {
   const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
+  core.info(`Schema and instance pairs: ${JSON.stringify(schemaAndInstancePairs)}`);
 
   const results = schemaAndInstancePairs.map(({ schema, instance }) => {
     core.info(`Validating sample credential ${instance.fileName} against schema ${schema.fileName}...`);
@@ -64,6 +65,7 @@ async function validateSampleCredentials(jsonSchemas = []) {
   });
 
   const finalResult = results.every(({ valid }) => valid);
+  core.info(`Final sample credentials validation result: ${finalResult ? 'succeeded' : 'failed'}.`);
   if (!finalResult) {
     const errorDetails = results.map(({ errors }) => errors).join('\n');
     return core.setFailed(`Sample credentials validation failed: ${errorDetails}`);
