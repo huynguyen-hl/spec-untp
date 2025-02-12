@@ -4,6 +4,6 @@ COPY package*.json /
 
 RUN npm ci
 
-COPY validation.js /validation.js
+COPY index.js /index.js
 
 CMD ["npm", "start"]
