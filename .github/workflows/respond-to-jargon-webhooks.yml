@@ -22,6 +22,10 @@ jobs:
         run: |
           echo 'Received Payload:'
           echo '${{ toJson(github.event.client_payload) }}'
+      - name: Validate Jargon Artefacts
+        uses: ./.github/actions/validate-jargon-artefacts
+        with:
+          jargon-webhook-payload: ${{ github.event }}
 
   # get-jargonArtefacts:
   #   runs-on: ubuntu-latest

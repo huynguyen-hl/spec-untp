@@ -1,0 +1,11 @@
+{
+  "name": "validate-jargon-artefacts",
+  "description": "A custom GitHub Action to validate Jargon artefacts",
+  "main": "validation.js",
+  "scripts": {
+    "start": "node validation.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1"
+  }
+}
