@@ -22,10 +22,12 @@ async function validateJargonArtefacts(jargonArtefact) {
     }
 
     core.info('Validating Jargon artefacts...');
-    core.info(`Json Schemas: ${jargonArtefact.artefacts.jsonSchemas}`);
-    if (jargonArtefact.artefacts.jsonSchemas && jargonArtefact.artefacts.jsonSchemas.length) {
+
+    const { jsonSchemas } = jargonArtefact.artefacts;
+    core.info(`Json Schemas: ${JSON.stringify(jsonSchemas)}`);
+    if (jsonSchemas && jsonSchemas.length) {
       core.info('Validating sample credentials...');
-      await validateSampleCredentials(jargonArtefact.jsonSchemas);
+      await validateSampleCredentials(jsonSchemas);
       core.info('Sample credentials validation complete.');
     }
 
