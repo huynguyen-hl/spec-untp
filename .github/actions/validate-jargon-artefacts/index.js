@@ -44,7 +44,6 @@ function validateJsonLdContext(jsonldContext) {}
 // validate sample credentials
 async function validateSampleCredentials(jsonSchemas) {
   const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
-  core.info(`Schema and instance pairs: ${JSON.stringify(schemaAndInstancePairs)}`);
 
   const results = schemaAndInstancePairs.map(({ schema, instance }) => {
     core.info(`Validating sample credential "${instance.fileName}" against schema "${schema.fileName}"...`);
