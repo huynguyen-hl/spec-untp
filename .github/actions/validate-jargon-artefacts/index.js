@@ -14,7 +14,7 @@ const jsonInstanceSuffix = '_instance_jsonSchema.json';
 
 async function validateJargonArtefacts(jargonArtefact) {
   try {
-    if (!jargonArtefactPayload) {
+    if (!jargonArtefact) {
       return core.setFailed('No Jargon artefact payload found.');
     }
     if (jargonArtefact.action && jargonArtefact.action.test) {
@@ -118,9 +118,6 @@ async function pairSchemasAndInstances(jsonSchemas) {
 
 async function run() {
   try {
-      core.info(`Raw Payload: ${jargonArtefactPayload}`); // Debugging log
-      core.info(`typeof jargonArtefactPayload: ${typeof jargonArtefactPayload}`);
-
       const jargonArtefactPayload = process.env['INPUT_JARGON-WEBHOOK-PAYLOAD'];
       const jargonArtefact = JSON.parse(jargonArtefactPayload);
       await validateJargonArtefacts(jargonArtefact);
