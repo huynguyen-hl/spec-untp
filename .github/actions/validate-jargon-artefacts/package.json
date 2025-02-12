@@ -2,6 +2,7 @@
   "name": "validate-jargon-artefacts",
   "description": "A custom GitHub Action to validate Jargon artefacts",
   "main": "validation.js",
+  "type": "module",
   "scripts": {
     "start": "node validation.js"
   },
