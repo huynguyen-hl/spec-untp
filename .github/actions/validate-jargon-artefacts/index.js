@@ -47,12 +47,12 @@ async function validateSampleCredentials(jsonSchemas) {
   core.info(`Schema and instance pairs: ${JSON.stringify(schemaAndInstancePairs)}`);
 
   const results = schemaAndInstancePairs.map(({ schema, instance }) => {
-    core.info(`Validating sample credential ${instance.fileName} against schema ${schema.fileName}...`);
+    core.info(`Validating sample credential "${instance.fileName}" against schema "${schema.fileName}"...`);
     const validate = ajv.compile(schema.json);
     const isValid = validate(instance.json);
 
     // Check if all errors are additionalProperties
-    const onlyAdditionalPropertiesErrors = validate.errors.every((error) => error.keyword === 'additionalProperties');
+    const onlyAdditionalPropertiesErrors = validate?.errors?.every((error) => error.keyword === 'additionalProperties');
     const combinedResult = isValid || onlyAdditionalPropertiesErrors;
 
     core.info(`Sample credential "${instance.fileName}" validation ${combinedResult ? 'succeeded' : 'failed'}.`);
@@ -113,7 +113,7 @@ async function pairSchemasAndInstances(jsonSchemas) {
     const instanceFileName = `${baseName}${jsonInstanceSuffix}`;
 
     if (!instances[instanceFileName]) {
-      core.setFailed(`No instance found for schema ${schemaFileName}`);
+      core.setFailed(`No instance found for schema "${schemaFileName}".`);
       return null;
     }
 
@@ -122,11 +122,11 @@ async function pairSchemasAndInstances(jsonSchemas) {
       fetchArtefactData(instances[instanceFileName])]
     );
     if (!schemaJson || !instanceJson) {
-      core.setFailed(`Failed to fetch schema ${schemaFileName} or instance ${instanceFileName}.`);
+      core.setFailed(`Failed to fetch schema "${schemaFileName}" or instance "${instanceFileName}".`);
       return null;
     }
 
-    core.info(`Fetched schema ${schemaFileName} and instance ${instanceFileName}.`);
+    core.info(`Fetched schema "${schemaFileName}" and instance "${instanceFileName}".`);
 
     return { 
       schema: { fileName: schemaFileName, url: schemas[schemaFileName], json: schemaJson },
