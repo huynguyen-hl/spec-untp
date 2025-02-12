@@ -104,6 +104,8 @@ function splitSchemasAndInstances(jsonSchemas) {
 
 async function pairSchemasAndInstances(jsonSchemas) {
   const { schemas, instances } = splitSchemasAndInstances(jsonSchemas);
+  core.info(`Schemas: ${JSON.stringify(schemas)}`);
+  core.info(`Instances: ${JSON.stringify(instances)}`);
 
   const schemaFileNames = Object.keys(schemas);
   const pairPromises = schemaFileNames.map(async schemaFileName => {
@@ -111,6 +113,7 @@ async function pairSchemasAndInstances(jsonSchemas) {
     const instanceFileName = `${baseName}${jsonInstanceSuffix}`;
 
     if (!instances[instanceFileName]) {
+      core.setFailed(`No instance found for schema ${schemaFileName}`);
       return null;
     }
 
@@ -118,9 +121,12 @@ async function pairSchemasAndInstances(jsonSchemas) {
       fetchArtefactData(schemas[schemaFileName]),
       fetchArtefactData(instances[instanceFileName])]
     );
-    if (schemaJson || instanceJson) {
+    if (!schemaJson || !instanceJson) {
+      core.setFailed(`Failed to fetch schema ${schemaFileName} or instance ${instanceFileName}.`);
       return null;
     }
+
+    core.info(`Fetched schema ${schemaFileName} and instance ${instanceFileName}.`);
 
     return { 
       schema: { fileName: schemaFileName, url: schemas[schemaFileName], json: schemaJson },
