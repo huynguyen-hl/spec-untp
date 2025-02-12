@@ -23,9 +23,12 @@ async function validateJargonArtefacts(jargonArtefact) {
 
     core.info('Validating Jargon artefacts...');
     if (jargonArtefact.jsonSchemas && jargonArtefact.jsonSchemas.length) {
+      core.info('Validating sample credentials...');
       await validateSampleCredentials(jargonArtefact.jsonSchemas);
+      core.info('Sample credentials validation complete.');
     }
 
+    core.info('Jargon artefacts validation complete.');
   } catch (error) {
     core.setFailed(`Error validating Jargon artefacts: ${error.message}`);
   }
@@ -40,14 +43,19 @@ async function validateSampleCredentials(jsonSchemas = []) {
   const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
 
   const results = schemaAndInstancePairs.map(({ schema, instance }) => {
-    const validate = ajv.compile(schema);
-    const isValid = validate(instance);
+    core.info(`Validating sample credential ${instance.fileName} against schema ${schema.fileName}...`);
+    const validate = ajv.compile(schema.json);
+    const isValid = validate(instance.json);
 
     // Check if all errors are additionalProperties
     const onlyAdditionalPropertiesErrors = validate.errors.every((error) => error.keyword === 'additionalProperties');
+    const combinedResult = isValid || onlyAdditionalPropertiesErrors;
 
+    core.info(`Sample credential "${instance.fileName}" validation ${combinedResult ? 'succeeded' : 'failed'}.`);
     return {
-      valid: isValid || onlyAdditionalPropertiesErrors,
+      schemaFileName: schema.fileName,
+      instanceFileName: instance.fileName,
+      valid: combinedResult,
       errors: validate.errors,
     };
   });
@@ -55,7 +63,7 @@ async function validateSampleCredentials(jsonSchemas = []) {
   const finalResult = results.every(({ valid }) => valid);
   if (!finalResult) {
     const errorDetails = results.map(({ errors }) => errors).join('\n');
-    core.setFailed(`Sample credentials validation failed: ${errorDetails}`);
+    return core.setFailed(`Sample credentials validation failed: ${errorDetails}`);
   }
 }
 
@@ -109,7 +117,10 @@ async function pairSchemasAndInstances(jsonSchemas) {
       return null;
     }
 
-    return { schema: schemaJson, instance: instanceJson };
+    return { 
+      schema: { fileName: schemaFileName, url: schemas[schemaFileName], json: schemaJson },
+      instance: { fileName: instanceFileName, url: instances[instanceFileName], json: instanceJson }
+    };
   });
 
   const pairs = await Promise.all(pairPromises); // Fetch all pairs in parallel
