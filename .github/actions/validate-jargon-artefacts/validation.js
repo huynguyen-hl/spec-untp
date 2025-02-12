@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 
-const jargonArtefactPayload = process.env.INPUT_JARGON_WEBHOOK_PAYLOAD;
+const jargonArtefactPayload = process.env['INPUT_JARGON-WEBHOOK-PAYLOAD'];
+core.info(`process.env: ${process.env}`);
 
 async function validateJargonArtefacts(jargonArtefact) {
   try {
