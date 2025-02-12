@@ -18,6 +18,8 @@ jobs:
       contents: write
 
     steps:
+      - name: Get code
+        uses: actions/checkout@v3
       - name: Log the JSON payload
         run: |
           echo 'Received Payload:'
