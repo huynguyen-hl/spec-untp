@@ -2,6 +2,11 @@ const core = require('@actions/core');
 const { validateCredentialsSchemas } = require('./schemaValidation');
 const { validateContextInCredential, validateContext } = require('./contextValidation');
 
+/**
+ * Validate Jargon artefacts including sample credentials and JSON-LD context
+ * @param {*} jargonArtefact 
+ * @returns void
+ */
 async function validateJargonArtefacts(jargonArtefact) {
   try {
     if (!jargonArtefact || !jargonArtefact.artefacts) {
@@ -42,6 +47,9 @@ async function validateJargonArtefacts(jargonArtefact) {
   }
 }
 
+/**
+ * Run the action
+ */
 async function run() {
   try {
       const jargonArtefactPayload = process.env['INPUT_JARGON-WEBHOOK-PAYLOAD'];

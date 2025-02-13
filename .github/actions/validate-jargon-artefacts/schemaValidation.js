@@ -13,7 +13,12 @@ addFormats(ajv);
 const jsonSchemaSuffix = '_jsonSchema.json';
 const jsonInstanceSuffix = '_instance_jsonSchema.json';
 
-// validate sample credentials
+/**
+ * Validate sample credentials against their JSON schemas using AJV
+ * @param {*} jsonSchemas 
+ * @returns void
+ */
+
 async function validateCredentialsSchemas (jsonSchemas) {
   const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
 
@@ -43,6 +48,12 @@ async function validateCredentialsSchemas (jsonSchemas) {
     return core.setFailed(`Sample credentials validation failed: ${JSON.stringify(results)}`);
   }
 }
+
+/**
+ * Pair JSON schemas and instances
+ * @param {*} jsonSchemas 
+ * @returns { schema: {fileName, url, json}, instance: {fileName, url, json} }
+ */
 
 async function pairSchemasAndInstances (jsonSchemas) {
   const { schemas, instances } = splitSchemasAndInstances(jsonSchemas);
@@ -80,13 +91,21 @@ async function pairSchemasAndInstances (jsonSchemas) {
   return pairs.filter(pair => pair); // Remove null values
 }
 
+/**
+ * Split JSON schemas and instances into separate objects
+ * @param {*} jsonSchemas
+ * @returns {schemas: {fileName: url}, instances: {fileName: url}}
+ */
+
 function splitSchemasAndInstances (jsonSchemas) {
   const schemas = {};
   const instances = {};
 
   for (const schema of jsonSchemas) {
+    // Check if schema is a JSON schema and not an instance
     if (schema.fileName.includes(jsonSchemaSuffix) && !schema.fileName.includes('_instance')) {
       schemas[schema.fileName] = schema.url;
+      // Check if schema is an instance
     } else if (schema.fileName.includes(jsonInstanceSuffix)) {
       instances[schema.fileName] = schema.url;
     }
