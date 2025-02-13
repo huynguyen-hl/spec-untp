@@ -4,15 +4,16 @@ const { splitSchemasAndInstances } = require('./schemaValidation');
 const { fetchArtefactData } = require('./utils');
 
 // validate context
-async function validateContext (jsonldContext) {
+async function validateContext(jsonldContext) {
   try {
-    return await jsonld.expand(jsonldContext);
+    const context = await fetchArtefactData(jsonldContext.url);
+    return await jsonld.expand(context);
   } catch (error) {
     core.setFailed(`Error validating context: ${JSON.stringify(error)}`);
   }
 }
 
-async function validateContextInCredential (jsonSchemas) {
+async function validateContextInCredential(jsonSchemas) {
   const { instances } = splitSchemasAndInstances(jsonSchemas);
   const instanceFileNames = Object.keys(instances);
 

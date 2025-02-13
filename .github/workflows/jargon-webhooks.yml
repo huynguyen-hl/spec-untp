@@ -19,10 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Log the JSON payload
-        run: |
-          echo 'Received Payload:'
-          echo '${{ toJson(github.event.client_payload) }}'
       - name: Validate Jargon Artefacts
         uses: ./.github/actions/validate-jargon-artefacts
         with:
