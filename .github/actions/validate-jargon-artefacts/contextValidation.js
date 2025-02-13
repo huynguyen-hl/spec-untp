@@ -4,7 +4,7 @@ const { splitSchemasAndInstances } = require('./schemaValidation');
 const { fetchArtefactData } = require('./utils');
 
 // validate context
-export async function validateContext(jsonldContext) {
+exports.validateContext = async (jsonldContext) => {
   try {
     return await jsonld.expand(jsonldContext);
   } catch (error) {
@@ -12,7 +12,7 @@ export async function validateContext(jsonldContext) {
   }
 }
 
-export async function validateContextInCredential(jsonSchemas) {
+exports.validateContextInCredential = async (jsonSchemas) => {
   const { instances } = splitSchemasAndInstances(jsonSchemas);
   const instanceFileNames = Object.keys(instances);
 

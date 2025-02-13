@@ -1,4 +1,4 @@
-export async function fetchArtefactData(url) {
+exports.fetchArtefactData = async (url) => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
