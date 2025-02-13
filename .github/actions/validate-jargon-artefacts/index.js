@@ -1,16 +1,6 @@
 const core = require('@actions/core');
-const addFormats = require('ajv-formats');
-const Ajv2020 = require('ajv/dist/2020');
-
-const ajv = new Ajv2020({
-  allErrors: true,
-  strict: false,
-  validateFormats: false,
-});
-addFormats(ajv);
-
-const jsonSchemaSuffix = '_jsonSchema.json';
-const jsonInstanceSuffix = '_instance_jsonSchema.json';
+const { validateCredentialsSchemas } = require('./schemaValidation');
+const { validateContextInCredential, validateContext } = require('./contextValidation');
 
 async function validateJargonArtefacts(jargonArtefact) {
   try {
@@ -23,12 +13,27 @@ async function validateJargonArtefacts(jargonArtefact) {
 
     core.info('Validating Jargon artefacts...');
 
-    const { jsonSchemas = [] } = jargonArtefact.artefacts;
+    // Validate sample credentials against its JSON schemas
+    const { jsonSchemas = [], jsonldContext } = jargonArtefact.artefacts;
     core.info(`Json Schemas: ${JSON.stringify(jsonSchemas)}`);
     if (jsonSchemas && jsonSchemas.length) {
-      core.info('Validating sample credentials...');
-      await validateSampleCredentials(jsonSchemas);
-      core.info('Sample credentials validation complete.');
+      core.info('Validating sample credentials against schemas...');
+      await validateCredentialsSchemas(jsonSchemas);
+      core.info('Sample cretidentials against schemas validation complete.');
+
+      // Validate JSON-LD context in credentials
+      core.info('Validating context in credentials...');
+      await validateContextInCredential(jsonSchemas);
+      core.info('Context in credentials validation complete.');
+
+    }
+
+    // Validate JSON-LD context
+    core.info(`Json LD context: ${JSON.stringify(jsonldContext)}`);
+    if (jsonldContext) {
+      core.info('Validating context...');
+      await validateContext(jsonldContext);
+      core.info('Context validation complete.');
     }
 
     core.info('Jargon artefacts validation complete.');
@@ -37,109 +42,12 @@ async function validateJargonArtefacts(jargonArtefact) {
   }
 }
 
-// JSON-LD context files, [schemas, and sample credentials]
-
-// validate context
-function validateJsonLdContext(jsonldContext) {}
-// validate sample credentials
-async function validateSampleCredentials(jsonSchemas) {
-  const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
-
-  const results = schemaAndInstancePairs.map(({ schema, instance }) => {
-    core.info(`Validating sample credential "${instance.fileName}" against schema "${schema.fileName}"...`);
-    const validate = ajv.compile(schema.json);
-    const isValid = validate(instance.json);
-
-    // Check if all errors are additionalProperties
-    const onlyAdditionalPropertiesErrors = validate?.errors?.every((error) => error.keyword === 'additionalProperties');
-    const combinedResult = isValid || onlyAdditionalPropertiesErrors;
-
-    core.info(`Sample credential "${instance.fileName}" validation ${combinedResult ? 'succeeded' : 'failed'}.`);
-    return {
-      schemaFileName: schema.fileName,
-      instanceFileName: instance.fileName,
-      valid: combinedResult,
-      errors: validate.errors,
-    };
-  });
-
-  const finalResult = results.every(({ valid }) => valid);
-  core.info(`Final sample credentials validation result: ${finalResult ? 'succeeded' : 'failed'}.`);
-  if (!finalResult) {
-    return core.setFailed(`Sample credentials validation failed: ${JSON.stringify(results)}`);
-  }
-}
-
-async function fetchArtefactData(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      core.setFailed(`Failed to fetch ${url}: ${response.statusText}`);
-      return null;
-    }
-
-    return response.json();
-  } catch (error) {
-    core.setFailed(`Error fetching artefact data: ${error.message}`);
-    return null;
-  }
-}
-
-function splitSchemasAndInstances(jsonSchemas) {
-  const schemas = {};
-  const instances = {};
-
-  for (const schema of jsonSchemas) {
-    if (schema.fileName.includes(jsonSchemaSuffix) && !schema.fileName.includes('_instance')) {
-      schemas[schema.fileName] = schema.url;
-    } else if (schema.fileName.includes(jsonInstanceSuffix)) {
-      instances[schema.fileName] = schema.url;
-    }
-  }
-
-  return { schemas, instances };
-}
-
-async function pairSchemasAndInstances(jsonSchemas) {
-  const { schemas, instances } = splitSchemasAndInstances(jsonSchemas);
-  core.info(`Schemas: ${JSON.stringify(schemas)}`);
-  core.info(`Instances: ${JSON.stringify(instances)}`);
-
-  const schemaFileNames = Object.keys(schemas);
-  const pairPromises = schemaFileNames.map(async schemaFileName => {
-    const baseName = schemaFileName.replace(jsonSchemaSuffix, '');
-    const instanceFileName = `${baseName}${jsonInstanceSuffix}`;
-
-    if (!instances[instanceFileName]) {
-      core.setFailed(`No instance found for schema "${schemaFileName}".`);
-      return null;
-    }
-
-    const [schemaJson, instanceJson] = await Promise.all([
-      fetchArtefactData(schemas[schemaFileName]),
-      fetchArtefactData(instances[instanceFileName])]
-    );
-    if (!schemaJson || !instanceJson) {
-      core.setFailed(`Failed to fetch schema "${schemaFileName}" or instance "${instanceFileName}".`);
-      return null;
-    }
-
-    core.info(`Fetched schema "${schemaFileName}" and instance "${instanceFileName}".`);
-
-    return { 
-      schema: { fileName: schemaFileName, url: schemas[schemaFileName], json: schemaJson },
-      instance: { fileName: instanceFileName, url: instances[instanceFileName], json: instanceJson }
-    };
-  });
-
-  const pairs = await Promise.all(pairPromises); // Fetch all pairs in parallel
-  return pairs.filter(pair => pair); // Remove null values
-}
-
 async function run() {
   try {
       const jargonArtefactPayload = process.env['INPUT_JARGON-WEBHOOK-PAYLOAD'];
       const jargonArtefact = JSON.parse(jargonArtefactPayload);
+      core.info(`Jargon artefact payload: ${JSON.stringify(jargonArtefact)}`);
+
       await validateJargonArtefacts(jargonArtefact);
   } catch (error) {
       core.setFailed(`Unexpected error: ${error.message}`);
