@@ -4,7 +4,7 @@ const { splitSchemasAndInstances } = require('./schemaValidation');
 const { fetchArtefactData } = require('./utils');
 
 // validate context
-exports.validateContext = async (jsonldContext) => {
+async function validateContext (jsonldContext) {
   try {
     return await jsonld.expand(jsonldContext);
   } catch (error) {
@@ -12,7 +12,7 @@ exports.validateContext = async (jsonldContext) => {
   }
 }
 
-exports.validateContextInCredential = async (jsonSchemas) => {
+async function validateContextInCredential (jsonSchemas) {
   const { instances } = splitSchemasAndInstances(jsonSchemas);
   const instanceFileNames = Object.keys(instances);
 
@@ -36,3 +36,5 @@ exports.validateContextInCredential = async (jsonSchemas) => {
     core.setFailed(`Error validating context in credentials: ${JSON.stringify(error)}`);
   }
 }
+
+module.exports = { validateContext, validateContextInCredential };

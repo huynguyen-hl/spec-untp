@@ -1,4 +1,4 @@
-exports.fetchArtefactData = async (url) => {
+async function fetchArtefactData (url) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -12,3 +12,5 @@ exports.fetchArtefactData = async (url) => {
     return null;
   }
 }
+
+module.exports = { fetchArtefactData };

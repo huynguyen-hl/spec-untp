@@ -14,7 +14,7 @@ const jsonSchemaSuffix = '_jsonSchema.json';
 const jsonInstanceSuffix = '_instance_jsonSchema.json';
 
 // validate sample credentials
-exports.validateCredentialsSchemas = async (jsonSchemas) => {
+async function validateCredentialsSchemas (jsonSchemas) {
   const schemaAndInstancePairs = await pairSchemasAndInstances(jsonSchemas);
 
   const results = schemaAndInstancePairs.map(({ schema, instance }) => {
@@ -44,7 +44,7 @@ exports.validateCredentialsSchemas = async (jsonSchemas) => {
   }
 }
 
-exports.pairSchemasAndInstances = async (jsonSchemas) => {
+async function pairSchemasAndInstances (jsonSchemas) {
   const { schemas, instances } = splitSchemasAndInstances(jsonSchemas);
   core.info(`Schemas: ${JSON.stringify(schemas)}`);
   core.info(`Instances: ${JSON.stringify(instances)}`);
@@ -80,7 +80,7 @@ exports.pairSchemasAndInstances = async (jsonSchemas) => {
   return pairs.filter(pair => pair); // Remove null values
 }
 
-exports.splitSchemasAndInstances = (jsonSchemas) => {
+function splitSchemasAndInstances (jsonSchemas) {
   const schemas = {};
   const instances = {};
 
@@ -94,3 +94,5 @@ exports.splitSchemasAndInstances = (jsonSchemas) => {
 
   return { schemas, instances };
 }
+
+module.exports = { validateCredentialsSchemas, pairSchemasAndInstances, splitSchemasAndInstances };
