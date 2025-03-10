@@ -54,10 +54,12 @@ jobs:
           --contentSelector="article" \
           --paginationSelector="a.pagination-nav__link.pagination-nav__link--next" \
           --excludeSelectors=".breadcrumbs,.theme-edit-this-page" \
+          --excludePaths="/docs/implementations/" \
           --excludeURLs="https://uncefact.github.io/spec-untp/docs/about/Meetings,https://uncefact.github.io/spec-untp/docs/about/FAQ" \
           --outputPDFFilename="website/static/un-transparency-protocol.pdf" \
           --coverTitle="UN Transparency Protocol" \
           --coverImage="https://uncefact.github.io/spec-untp/img/home-hero.jpg" \
+          --cssStyle="body { font-size: 13px !important; } h1 { font-size: 40px !important; } h2 { font-size: 26px !important; } h3 { font-size: 20px !important; } h4 { font-size: 13px !important; }" \
           --puppeteerArgs="--no-sandbox,--disable-setuid-sandbox"
 
       - name: commit pdf
